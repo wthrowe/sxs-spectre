@@ -5,9 +5,12 @@ EAPI=6
 
 inherit cmake-utils
 
+HASH=85baf9e685eb0c942764b7224fa1ce034bb3beba
+S=${WORKDIR}/${PN}-${HASH}
+
 DESCRIPTION="A C++ 11 meta-programming library"
 HOMEPAGE="https://github.com/edouarda/brigand/wiki"
-SRC_URI="https://github.com/edouarda/brigand/archive/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/edouarda/brigand/archive/${HASH}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Boost-1.0"
 SLOT="0"

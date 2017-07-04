@@ -19,7 +19,7 @@ RDEPEND="
 	virtual/blas
 	sci-libs/blaze
 	dev-libs/boost
-	dev-cpp/brigand
+	>=dev-cpp/brigand-1.3.0_p20170624
 	dev-cpp/catch
 	sci-libs/gsl
 	sci-libs/hdf5[-mpi]
