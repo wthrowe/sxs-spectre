@@ -21,8 +21,6 @@ DEPEND="${RDEPEND}"
 src_prepare() {
 	# Respect *FLAGS
 	sed -i -e '/^\(C\|CXX\|FC\)FLAGS :\?=/s/^/#/' Makefile || die
-	# Don't rebuild the entire package in src_install
-	sed -i -e 's/^\(install-minimal:\).*/\1/' Makefile || die
 
 	eapply_user
 }
@@ -76,5 +74,8 @@ src_test() {
 }
 
 src_install() {
-	emake INSTALL_ROOT="${D}/usr" POUTDIR="$(get_libdir)" install-minimal
+	# Upstream's install converts all their library symlinks into copies
+	dolib lib/*
+	doheader include/*
+	dobin bin/*
 }
