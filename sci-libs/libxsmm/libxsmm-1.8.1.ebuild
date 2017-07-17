@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit eutils multilib toolchain-funcs
+inherit eutils toolchain-funcs multilib-minimal
 
 DESCRIPTION="A library for small matrix-matrix multiplications and small convolutions"
 HOMEPAGE="https://github.com/hfp/libxsmm"
@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE_CPUFLAGS=( cpu_flags_x86_{avx2,avx,sse4_2,sse3} )
 IUSE="${IUSE_CPUFLAGS[*]} +blas static-libs"
 
-RDEPEND="blas? ( virtual/blas )"
+RDEPEND="blas? ( virtual/blas[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
@@ -23,9 +23,11 @@ src_prepare() {
 	sed -i -e '/^\(C\|CXX\|FC\)FLAGS :\?=/s/^/#/' Makefile || die
 
 	eapply_user
+
+	multilib_copy_sources
 }
 
-src_configure() {
+multilib_src_compile() {
 	local AVX SSE
 
 	# The package also supports AVX=3 for avx512f, but there's no flag
@@ -49,22 +51,20 @@ src_configure() {
 	OPTIONS=(
 		CC=$(tc-getCC)
 		CXX=$(tc-getCXX)
-		FC=$(tc-getFC)
+		FC= # Disable fortran
 		OPTFLAG=
 		AVX=${AVX}
 		SSE=${SSE}
 		BLAS=$(usex blas 1 0)
 	)
-}
 
-src_compile() {
 	emake STATIC=0 "${OPTIONS[@]}"
 	if use static-libs ; then
 		emake STATIC=1 "${OPTIONS[@]}"
 	fi
 }
 
-src_test() {
+multilib_src_test() {
 	# This rebuilds the package for some reason, and fails in parallel.
 	# It's not obvious to me why.
 	emake -j1 STATIC=0 "${OPTIONS[@]}" test-all
@@ -73,9 +73,9 @@ src_test() {
 	fi
 }
 
-src_install() {
+multilib_src_install() {
 	# Upstream's install converts all their library symlinks into copies
 	dolib lib/*
 	doheader include/*
-	dobin bin/*
+	multilib_is_native_abi && dobin bin/*
 }
