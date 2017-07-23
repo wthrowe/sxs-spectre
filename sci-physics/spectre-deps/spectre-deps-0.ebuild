@@ -3,6 +3,8 @@
 
 EAPI=6
 
+inherit multilib-build
+
 DESCRIPTION="Metapackage for dependencies of SpECTRE"
 HOMEPAGE="https://github.com/sxs-collaboration/spectre"
 SRC_URI=""
@@ -14,16 +16,16 @@ KEYWORDS="~amd64 ~x86"
 DEPEND=""
 RDEPEND="
 	>=dev-util/cmake-3.3.2
-	>=sys-cluster/charm-6.7.1_p20170526
+	>=sys-cluster/charm-6.7.1_p20170526[${MULTILIB_USEDEP}]
 	dev-vcs/git
-	virtual/blas
+	virtual/blas[${MULTILIB_USEDEP}]
 	sci-libs/blaze
-	dev-libs/boost
+	dev-libs/boost[${MULTILIB_USEDEP}]
 	>=dev-cpp/brigand-1.3.0_p20170624
 	dev-cpp/catch
-	sci-libs/gsl
-	sci-libs/hdf5[-mpi]
-	dev-libs/jemalloc
-	sci-libs/libxsmm
-	dev-cpp/yaml-cpp
+	sci-libs/gsl[${MULTILIB_USEDEP}]
+	sci-libs/hdf5[-mpi,${MULTILIB_USEDEP}]
+	dev-libs/jemalloc[${MULTILIB_USEDEP}]
+	sci-libs/libxsmm[${MULTILIB_USEDEP}]
+	dev-cpp/yaml-cpp[${MULTILIB_USEDEP}]
 "
