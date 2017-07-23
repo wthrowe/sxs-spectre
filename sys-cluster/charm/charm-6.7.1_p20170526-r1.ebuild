@@ -7,7 +7,7 @@ EAPI=5
 FORTRAN_STANDARD="90"
 PYTHON_COMPAT=( python2_7 )
 
-inherit eutils flag-o-matic fortran-2 multilib multiprocessing python-any-r1 toolchain-funcs
+inherit eutils flag-o-matic fortran-2 multilib multiprocessing python-any-r1 toolchain-funcs autotools multilib-minimal
 
 MY_P=${P%_p*}
 S=${WORKDIR}/${MY_P}
@@ -21,7 +21,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="charmdebug charmtracing charmproduction cmkopt doc examples mlogft mpi ampi numa smp static-libs syncft tcp"
 
-RDEPEND="mpi? ( virtual/mpi )"
+RDEPEND="
+	sys-libs/zlib[${MULTILIB_USEDEP}]
+	mpi? ( virtual/mpi[${MULTILIB_USEDEP}] )
+	numa? ( sys-process/numactl[${MULTILIB_USEDEP}] )"
 DEPEND="
 	${RDEPEND}
 	doc? (
@@ -97,19 +100,35 @@ src_prepare() {
 
 	# Fix QA notice. Filed report with upstream.
 	append-cflags -DALLOCA_H
+
+	# Disable library autodetection
+	pushd src/scripts >/dev/null || die
+
+	sed -e 's/test_link .*libjpeg/pass=0;fail=1 # &/' \
+		-i configure.in || die
+
+	eautoreconf
+
+	popd >/dev/null || die
 }
 
-src_compile() {
+multilib_src_compile() {
 	export USER_OPTS_CC="${CFLAGS}"
 	export USER_OPTS_CXX="${CXXFLAGS}"
 	export USER_OPTS_LD="${LDFLAGS}"
 	export USER_OPTS_LDXX="${LDFLAGS}"
 
-	local build_version="$(usex mpi "mpi" "net")-linux$(usex amd64 "-amd64" '')"
+	local build_suffix
+	case "${MULTILIB_ABI_FLAG}" in
+		abi_x86_64) build_suffix="-amd64" ;;
+		*) build_suffix="" ;;
+	esac
+	local build_version="$(usex mpi "mpi" "net")-linux${build_suffix}"
 	local build_options="$(get_opts)"
 	#build only accepts -j from MAKEOPTS
-	local build_commandline="${build_version} ${build_options} -j$(makeopts_jobs)"
+	local build_commandline="${build_version} ${build_options} -j$(makeopts_jobs) --destination=$(pwd)"
 
+	cd "${S}"
 	# Build charmm++ first.
 	einfo "running ./build charm++ ${build_commandline}"
 	./build charm++ ${build_commandline} || die "Failed to build charm++"
@@ -120,12 +139,12 @@ src_compile() {
 	fi
 
 	# make pdf/html docs
-	if use doc; then
+	if multilib_is_native_abi && use doc; then
 		emake -j1 -C doc/charm++
 	fi
 }
 
-src_test() {
+multilib_src_test() {
 	make -C tests/charm++ test TESTOPTS="++local" || die
 }
 
@@ -138,41 +157,61 @@ src_install() {
 	# SpECTRE patch
 	epatch "${FILESDIR}/spectre-${PV##*_p}.patch"
 
-	sed -e "s|gentoo-include|${P}|" \
-		-e "s|gentoo-libdir|$(get_libdir)|g" \
-		-e "s|VERSION|${P}/VERSION|" \
-		-i ./src/scripts/charmc || die "failed patching charmc script"
+	multilib_src_install() {
+		pushd "${BUILD_DIR}" >/dev/null || die
 
-	# In the following, some of the files are symlinks to ../tmp which we need
-	# to dereference first (see bug 432834).
+		# Break symlink to source directory
+		cp --remove-destination "$(readlink -e bin/charmc)" bin/charmc || die
 
-	local i
+		sed -e "s|gentoo-include|${PN}-${MULTILIB_ABI_FLAG}|" \
+			-e "s|gentoo-libdir|$(get_libdir)|g" \
+			-e "s|VERSION|${PN}-${MULTILIB_ABI_FLAG}/VERSION|" \
+			-i bin/charmc || die "failed patching charmc script"
 
-	# Install binaries.
-	for i in bin/*; do
-		if [[ -L ${i} ]]; then
-			i=$(readlink -e "${i}") || die
-		fi
-		dobin "${i}"
-	done
+		local charmbin=/usr/libexec/${PN}-${MULTILIB_ABI_FLAG}
+		sed -e "s|findCharmBin() {|& CHARMBIN=${charmbin}|" \
+			-i bin/charmc || die
 
-	# Install headers.
-	insinto /usr/include/${P}
-	for i in include/*; do
-		if [[ -L ${i} ]]; then
-			i=$(readlink -e "${i}") || die
-		fi
-		doins "${i}"
-	done
+		# In the following, some of the files are symlinks to ../tmp which we need
+		# to dereference first (see bug 432834).
 
-	# Install libs incl. charm objects
-	for i in lib*/*.{so,a}; do
-		[[ ${i} = *.a ]] && use !static-libs && continue
-		if [[ -L ${i} ]]; then
-			i=$(readlink -e "${i}") || die
-		fi
-		[[ ${i} = *.so ]] && dolib.so "${i}" || dolib "${i}"
-	done
+		local i
+
+		# Install binaries.
+		exeinto "${charmbin}"
+		doexe bin/charmc
+		doexe bin/charmd{,_faceless}
+		doexe bin/charmxi
+		doexe bin/conv-cpm
+		# Disable spying
+		newexe bin/charmrun-silent charmrun
+
+		for i in charmc charmd{,_faceless} charmrun ; do
+			dosym "../..${charmbin}/${i}" /usr/bin/${CHOST}-${i}
+			multilib_is_native_abi && dosym ${CHOST}-${i} /usr/bin/${i}
+		done
+
+		# Install headers.
+		insinto /usr/include/${PN}-${MULTILIB_ABI_FLAG}
+		for i in include/*; do
+			if [[ -L ${i} ]]; then
+				i=$(readlink -e "${i}") || die
+			fi
+			doins "${i}"
+		done
+
+		# Install libs incl. charm objects
+		for i in lib*/*.{so,a}; do
+			[[ ${i} = *.a ]] && use !static-libs && continue
+			if [[ -L ${i} ]]; then
+				i=$(readlink -e "${i}") || die
+			fi
+			[[ ${i} = *.so ]] && dolib.so "${i}" || dolib "${i}"
+		done
+
+		popd >/dev/null || die
+	}
+	multilib_foreach_abi multilib_src_install
 
 	# Basic docs.
 	dodoc CHANGES README
