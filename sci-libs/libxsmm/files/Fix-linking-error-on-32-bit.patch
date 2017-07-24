@@ -1,0 +1,25 @@
+From e0447dadf4e23b3fcb6492236b96da13c306b239 Mon Sep 17 00:00:00 2001
+From: William Throwe <wtt6@cornell.edu>
+Date: Mon, 24 Jul 2017 00:35:35 -0400
+Subject: [PATCH] Fix linking error on 32-bit
+
+---
+ src/libxsmm_cpuid_x86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libxsmm_cpuid_x86.c b/src/libxsmm_cpuid_x86.c
+index 867b3cb64..02c5dca1e 100644
+--- a/src/libxsmm_cpuid_x86.c
++++ b/src/libxsmm_cpuid_x86.c
+@@ -46,7 +46,7 @@
+       ".byte 0x0f, 0xa2" /*cpuid*/ : "=a"(EAX), "=b"(EBX), "=c"(ECX), "=d"(EDX) : "a"(FUNCTION), "c"(0) \
+     )
+ # else
+-LIBXSMM_EXTERN LIBXSMM_RETARGETABLE int __get_cpuid(unsigned int, unsigned int*, unsigned int*, unsigned int*, unsigned int*);
++#   include <cpuid.h>
+ #   define LIBXSMM_CPUID_X86(FUNCTION, EAX, EBX, ECX, EDX) __get_cpuid(FUNCTION, &(EAX), &(EBX), &(ECX), &(EDX))
+ # endif
+ #elif !defined(_CRAYC)
+-- 
+2.13.0
+

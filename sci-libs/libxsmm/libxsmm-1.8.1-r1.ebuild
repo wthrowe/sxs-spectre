@@ -22,6 +22,8 @@ src_prepare() {
 	# Respect *FLAGS
 	sed -i -e '/^\(C\|CXX\|FC\)FLAGS :\?=/s/^/#/' Makefile || die
 
+	eapply "${FILESDIR}/Fix-linking-error-on-32-bit.patch"
+
 	eapply_user
 
 	multilib_copy_sources
