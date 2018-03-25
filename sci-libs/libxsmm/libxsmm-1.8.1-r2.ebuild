@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit eutils toolchain-funcs multilib-minimal
+inherit eutils toolchain-funcs
 
 DESCRIPTION="A library for small matrix-matrix multiplications and small convolutions"
 HOMEPAGE="https://github.com/hfp/libxsmm"
@@ -15,21 +15,17 @@ KEYWORDS="~amd64 ~x86"
 IUSE_CPUFLAGS=( cpu_flags_x86_{avx2,avx,sse4_2,sse3} )
 IUSE="${IUSE_CPUFLAGS[*]} +blas static-libs"
 
-RDEPEND="blas? ( virtual/blas[${MULTILIB_USEDEP}] )"
+RDEPEND="blas? ( virtual/blas )"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
 	# Respect *FLAGS
 	sed -i -e '/^\(C\|CXX\|FC\)FLAGS :\?=/s/^/#/' Makefile || die
 
-	eapply "${FILESDIR}/Fix-linking-error-on-32-bit.patch"
-
 	eapply_user
-
-	multilib_copy_sources
 }
 
-multilib_src_compile() {
+src_compile() {
 	local AVX SSE
 
 	# The package also supports AVX=3 for avx512f, but there's no flag
@@ -66,7 +62,7 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_test() {
+src_test() {
 	# This rebuilds the package for some reason, and fails in parallel.
 	# It's not obvious to me why.
 	emake -j1 STATIC=0 "${OPTIONS[@]}" test-all
@@ -75,9 +71,9 @@ multilib_src_test() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	# Upstream's install converts all their library symlinks into copies
 	dolib lib/*
 	doheader include/*
-	multilib_is_native_abi && dobin bin/*
+	dobin bin/*
 }
