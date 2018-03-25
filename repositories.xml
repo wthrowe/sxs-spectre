@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<repositories version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name>sxs-spectre</name>
+    <description>Gentoo overlay for dependencies of the SXS SpECTRE project</description>
+    <homepage>https://github.com/wthrowe/sxs-spectre</homepage>
+    <owner>
+      <name>William Throwe</name>
+      <email>wtt6@cornell.edu</email>
+    </owner>
+    <source type="git">https://github.com/wthrowe/sxs-spectre.git</source>
+  </repo>
+</repositories>
