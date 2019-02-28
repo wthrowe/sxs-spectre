@@ -81,20 +81,23 @@ get_opts() {
 }
 
 src_prepare() {
+	local f77="$(usex mpi "mpif90" "$(tc-getF77)") ${FCFLAGS}"
+	local f90="$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}"
+	local whichpat='`which .*`\|$(which .*)'
 	sed \
-		-e "/CMK_CF77=/s:[fg]77:$(usex mpi "mpif90" "$(tc-getF77)") ${FCFLAGS}:g" \
-		-e "/CMK_CF90=/s:f95:$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}:g" \
-		-e "/CMK_CF90=/s:\`which f90.*$::g" \
+		-e "/CMK_CF77=/s:[fg]77:${f77}:g" \
+		-e "/CMK_CF77=/s:${whichpat}:\`echo ${f77}\`:" \
+		-e "/CMK_CF90=/s:f95:${f90}:g" \
+		-e "/CMK_CF90=/s:gfortran:${f90}:g" \
+		-e "/CMK_CF90=/s:${whichpat}:\`echo ${f90}\`:" \
+		-e '/-z $CMK_CF90/d' \
 		-e "/CMK_CXX=/s:g++:$(usex mpi "mpic++" "$(tc-getCXX)"):g" \
 		-e "/CMK_CC=/s:gcc:$(usex mpi "mpicc" "$(tc-getCC)"):g" \
 		-e '/CMK_F90_MODINC=/s:-p:-I:g' \
-		-i src/arch/*-linux*/*sh || die
-	sed \
-		-e "/CMK_CF90=/s:gfortran:$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}:g" \
-		-e "/F90DIR=/s:gfortran:$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}:g" \
-		-e "/f95target=/s:gfortran:$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}:g" \
-		-e "/f95version=/s:gfortran:$(usex mpi "mpif90" "$(tc-getFC)") ${FCFLAGS}:g" \
-		-i src/arch/common/*.sh || die
+		-e "/F90DIR=/s:gfortran:${f90}:g" \
+		-e "/f95target=/s:gfortran:${f90}:g" \
+		-e "/f95version=/s:gfortran:${f90}:g" \
+		-i src/arch/*-linux*/*sh src/arch/common/*.sh || die
 
 	# CMK optimization
 	use cmkopt && append-cppflags -DCMK_OPTIMIZE=1
