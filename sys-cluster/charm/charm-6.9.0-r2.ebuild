@@ -192,6 +192,7 @@ src_install() {
 		[[ -s $i ]] || continue
 		[[ ${i} = *.so ]] && dolib.so "${i}" || dolib.a "${i}"
 	done
+	dolib.a lib/conv-static.o
 
 	# Basic docs.
 	dodoc CHANGES README
