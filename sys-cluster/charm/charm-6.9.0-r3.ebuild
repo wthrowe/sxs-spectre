@@ -185,6 +185,8 @@ src_install() {
 
 	# Install libs incl. charm objects
 	for i in lib*/*.{so,a}; do
+		# libhwloc_embedded.so handled below
+		[[ ${i} = lib_so/libhwloc_embedded.so ]] && continue
 		[[ ${i} = *.a ]] && use !static-libs && continue
 		if [[ -L ${i} ]]; then
 			i=$(readlink -e "${i}") || die
@@ -193,6 +195,12 @@ src_install() {
 		[[ ${i} = *.so ]] && dolib.so "${i}" || dolib.a "${i}"
 	done
 	dolib.a lib/conv-static.o
+	# Charm creates these as copies
+	dolib.so lib_so/libhwloc_embedded.so.0.0.0
+	dosym libhwloc_embedded.so.0.0.0 \
+		  "/usr/$(get_libdir)/libhwloc_embedded.so.0"
+	dosym libhwloc_embedded.so.0.0.0 \
+		  "/usr/$(get_libdir)/libhwloc_embedded.so"
 
 	# Basic docs.
 	dodoc CHANGES README
