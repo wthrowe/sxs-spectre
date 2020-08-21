@@ -1,9 +1,9 @@
 # Copyright 2017 William Throwe
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 HASH=85baf9e685eb0c942764b7224fa1ce034bb3beba
 S=${WORKDIR}/${PN}-${HASH}
