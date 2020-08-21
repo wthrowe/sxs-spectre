@@ -1,13 +1,12 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 # Copyright 2017-2019 William Throwe
 
 EAPI=5
 
 FORTRAN_STANDARD="90"
-PYTHON_COMPAT=( python2_7 )
 
-inherit eutils flag-o-matic fortran-2 multilib multiprocessing python-any-r1 toolchain-funcs
+inherit eutils flag-o-matic fortran-2 multilib multiprocessing toolchain-funcs
 
 DESCRIPTION="Message-passing parallel language and runtime system"
 HOMEPAGE="http://charm.cs.uiuc.edu/"
@@ -16,7 +15,7 @@ SRC_URI="http://charm.cs.uiuc.edu/distrib/${P}.tar.gz"
 LICENSE="charm"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="charmdebug charmtracing charmproduction cmkopt doc examples mlogft mpi ampi numa smp static-libs syncft tcp udp"
+IUSE="charmdebug charmtracing charmproduction cmkopt examples mlogft mpi ampi numa smp static-libs syncft tcp udp"
 
 RDEPEND="mpi? ( virtual/mpi )"
 # The build system uses autotools internally in unusual ways
@@ -24,27 +23,12 @@ DEPEND="
 	${RDEPEND}
 	sys-devel/autoconf
 	sys-devel/automake
-	doc? (
-		>=app-text/poppler-0.12.3-r3[utils]
-		dev-tex/latex2html
-		virtual/tex-base
-		$(python_gen_any_dep '
-			>=dev-python/beautifulsoup-4[${PYTHON_USEDEP}]
-			dev-python/lxml[${PYTHON_USEDEP}]
-		')
-		media-libs/netpbm
-		${PYTHON_DEPS}
-	)
 	"
 
 REQUIRED_USE="
 	cmkopt? ( !charmdebug !charmtracing )
 	charmproduction? ( !charmdebug !charmtracing )
 	?? ( tcp udp )"
-
-pkg_setup() {
-	use doc && python-any-r1_pkg_setup
-}
 
 get_opts() {
 	local CHARM_OPTS
@@ -139,11 +123,6 @@ src_compile() {
 		einfo "running ./build AMPI ${build_commandline}"
 		./build AMPI ${build_commandline} || die "Failed to build charm++"
 	fi
-
-	# make pdf/html docs
-	if use doc; then
-		emake -j1 -C doc/charm++
-	fi
 }
 
 src_test() {
@@ -216,17 +195,6 @@ src_install() {
 		insinto /usr/share/doc/${PF}/examples
 		doins -r examples/charm++/*
 		docompress -x /usr/share/doc/${PF}/examples
-	fi
-
-	# Install pdf/html docs
-	if use doc; then
-		cd "${S}/doc/charm++"
-		# Install pdfs.
-		insinto /usr/share/doc/${PF}/pdf
-		doins  *.pdf
-		# Install html.
-		docinto html
-		dohtml -r manual/*
 	fi
 }
 
