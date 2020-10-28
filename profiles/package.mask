@@ -1,0 +1,3 @@
+# Reverted upstream
+=sci-physics/spectre-deps-0_p20201013
+=sci-libs/blaze-3.8
