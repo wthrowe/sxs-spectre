@@ -41,6 +41,8 @@ RDEPEND="
 	>=dev-python/numpy-1.10[${PYTHON_USEDEP}]
 	dev-python/scipy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/h5py[${PYTHON_USEDEP}]
 	python? (
 		>=dev-python/pybind11-2.6.0[${PYTHON_USEDEP}]
 	)
