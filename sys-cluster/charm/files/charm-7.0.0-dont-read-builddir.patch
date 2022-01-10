@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt	2021-10-22 00:24:41.000000000 -0400
++++ b/CMakeLists.txt	2022-01-10 16:30:19.476016001 -0500
+@@ -912,7 +912,7 @@
+ file(APPEND  ${optfile_sh} "CMK_COMPILER_SUFFIX=${CMK_COMPILER_SUFFIX}\n")
+ 
+ if(NOT ${NETWORK} STREQUAL "mpi" AND NOT ${NETWORK} MATCHES "gni-" AND NOT ${NETWORK} MATCHES "-cray")
+-    file(APPEND ${optfile_sh} ". ${CMAKE_BINARY_DIR}/include/cc-${CMK_COMPILER}.sh\n")
++    file(APPEND ${optfile_sh} ". \"\$CHARMINC\"/cc-${CMK_COMPILER}.sh\n")
+ endif()
+ 
+ if(${BUILD_SHARED})
