@@ -23,6 +23,7 @@ RDEPEND="mpi? ( virtual/mpi )"
 # The build system uses autotools internally in unusual ways
 DEPEND="
 	${RDEPEND}
+	dev-util/cmake
 	sys-devel/autoconf
 	sys-devel/automake
 	"
