@@ -73,7 +73,7 @@ src_test() {
 
 src_install() {
 	# Upstream's install converts all their library symlinks into copies
-	dolib.so lib/*.so
+	dolib.so lib/*.so*
 	use static-libs && dolib.a lib/*.a
 	doheader include/*
 	dobin bin/*
