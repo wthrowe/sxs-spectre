@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # Copyright 2017-2022 William Throwe
 
-EAPI=7
+EAPI=8
 
 FORTRAN_STANDARD="90"
 
-inherit eutils flag-o-matic fortran-2 multiprocessing toolchain-funcs
+inherit flag-o-matic fortran-2 multiprocessing toolchain-funcs
 
 MY_PV=${PV/_/-}
 
@@ -159,8 +159,8 @@ src_install() {
 		find examples/ -name 'Makefile' | xargs sed \
 			-r "s:./charmrun:./charmrun ++local:" -i || \
 			die "Failed to fix examples"
-		insinto /usr/share/doc/${PF}/examples
-		doins -r examples/charm++/*
+		docinto /usr/share/doc/${PF}/examples
+		dodoc -r examples/charm++/*
 		docompress -x /usr/share/doc/${PF}/examples
 	fi
 }
