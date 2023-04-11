@@ -4,6 +4,9 @@
   <maintainer type="person">
     <email>wtt6@cornell.edu</email>
   </maintainer>
+  <upstream>
+    <remote-id type="github">sxs-collaboration/spectre</remote-id>
+  </upstream>
   <use>
     <flag name="development">Install packages needed only for development</flag>
     <flag name="visualization">Install packages needed only by visualization scripts</flag>

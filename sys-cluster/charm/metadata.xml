@@ -2,13 +2,11 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>nicolasbock@gentoo.org</email>
-		<name>Nicolas Bock</name>
+		<email>wtt6@cornell.edu</email>
 	</maintainer>
-	<maintainer type="project">
-		<email>sci@gentoo.org</email>
-		<name>Gentoo Science Project</name>
-	</maintainer>
+	<upstream>
+		<remote-id type="github">UIUC-PPL/charm</remote-id>
+	</upstream>
 	<use>
 		<flag name="charmdebug">Enable the charm debugger</flag>
 		<flag name="charmtracing">Enable tracing support in Charm++</flag>

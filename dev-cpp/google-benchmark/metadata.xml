@@ -4,4 +4,7 @@
   <maintainer type="person">
     <email>wtt6@cornell.edu</email>
   </maintainer>
+  <upstream>
+    <remote-id type="github">google/benchmark</remote-id>
+  </upstream>
 </pkgmetadata>
