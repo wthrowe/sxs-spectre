@@ -1,6 +1,6 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# Copyright 2017-2023 William Throwe
+# Copyright 2017-2024 William Throwe
 
 EAPI=8
 
@@ -23,9 +23,9 @@ RDEPEND="mpi? ( virtual/mpi )"
 # The build system uses autotools internally in unusual ways
 DEPEND="
 	${RDEPEND}
-	dev-util/cmake
-	sys-devel/autoconf
-	sys-devel/automake
+	dev-build/autoconf
+	dev-build/automake
+	dev-build/cmake
 	"
 
 REQUIRED_USE="?? ( tcp udp )"
