@@ -31,6 +31,7 @@ RDEPEND="
 	>=dev-cpp/catch-3.0.0
 	sci-libs/gsl
 	sci-libs/hdf5
+	!~sci-libs/hdf5-1.14.3
 	dev-libs/jemalloc
 	virtual/lapack
 	sci-libs/libsharp[-openmp,-mpi(-)]
