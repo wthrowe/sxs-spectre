@@ -12,7 +12,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="blas"
 
-DEPEND=""
 RDEPEND="
 	>=dev-libs/boost-1.54.0
 	blas? ( virtual/cblas )"

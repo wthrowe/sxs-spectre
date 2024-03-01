@@ -9,7 +9,6 @@ inherit python-r1
 
 DESCRIPTION="Metapackage for dependencies of SpECTRE"
 HOMEPAGE="https://github.com/sxs-collaboration/spectre"
-SRC_URI=""
 
 LICENSE="metapackage"
 SLOT="0"
@@ -17,7 +16,6 @@ KEYWORDS="~amd64"
 IUSE="+development +python +visualization"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND=""
 # The order of these packages matches the list on the SpECTRE
 # installation page.
 RDEPEND="

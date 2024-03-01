@@ -14,9 +14,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="openmp"
 
-RDEPEND=""
-DEPEND="${RDEPEND}"
-
 src_prepare() {
 	eapply "${FILESDIR}/1.0.0-respect-cflags.patch"
 	eapply_user
