@@ -60,7 +60,7 @@ RDEPEND="
 		dev-python/sphinx-click[${PYTHON_USEDEP}]
 		dev-python/furo[${PYTHON_USEDEP}]
 		dev-python/myst-parser[${PYTHON_USEDEP}]
-		dev-python/black[${PYTHON_USEDEP}]
+		~dev-python/black-23.3.0[${PYTHON_USEDEP}]
 		dev-python/isort[${PYTHON_USEDEP}]
 		dev-cpp/google-benchmark
 		sys-devel/clang
