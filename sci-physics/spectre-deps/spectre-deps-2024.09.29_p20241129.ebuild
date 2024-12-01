@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit python-r1
 
@@ -20,27 +20,24 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 # installation page.
 RDEPEND="
 	${PYTHON_DEPS}
-	>=dev-build/cmake-3.12.0
-	>=sys-cluster/charm-7.0.0-r1
+	>=dev-build/cmake-3.18.0
 	dev-vcs/git
 	virtual/blas
-	~sci-libs/blaze-3.8
+	virtual/lapack
 	python? ( >=dev-libs/boost-1.60.0[python,${PYTHON_USEDEP}] )
 	!python? ( >=dev-libs/boost-1.60.0 )
-	>=dev-cpp/brigand-1.3.0_p20220115
-	>=dev-cpp/catch-3.0.0
 	sci-libs/gsl
 	sci-libs/hdf5
 	!~sci-libs/hdf5-1.14.3
-	dev-libs/jemalloc
-	virtual/lapack
-	sci-libs/libsharp[-openmp,-mpi(-)]
+	>=sys-cluster/charm-7.0.0-r1
+	~sci-libs/blaze-3.8
+	>=dev-cpp/catch-3.4.0
 	>=sci-libs/libxsmm-1.16.1
-	>=dev-cpp/yaml-cpp-0.6.3
+	>=dev-cpp/yaml-cpp-0.7.0
 	dev-python/click[${PYTHON_USEDEP}]
 	dev-python/h5py[${PYTHON_USEDEP}]
 	dev-python/humanize[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/pandas[${PYTHON_USEDEP}]
@@ -50,9 +47,9 @@ RDEPEND="
 	python? (
 		>=dev-python/pybind11-2.6.0[${PYTHON_USEDEP}]
 	)
+	dev-libs/jemalloc
 	development? (
 		>=app-text/doxygen-1.9.1
-		<=app-text/doxygen-1.9.6.999999
 		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
 		dev-python/nbconvert[${PYTHON_USEDEP}]
 		dev-python/pybtex[${PYTHON_USEDEP}]
