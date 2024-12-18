@@ -14,6 +14,8 @@ DESCRIPTION="Message-passing parallel language and runtime system"
 HOMEPAGE="http://charm.cs.uiuc.edu/"
 SRC_URI="https://github.com/UIUC-PPL/charm/archive/refs/tags/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 
+S=${WORKDIR}/${PN}-${MY_PV}
+
 LICENSE="charm"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -29,8 +31,6 @@ DEPEND="
 	"
 
 REQUIRED_USE="?? ( tcp udp )"
-
-S=${WORKDIR}/${PN}-${MY_PV}
 
 get_opts() {
 	local CHARM_OPTS

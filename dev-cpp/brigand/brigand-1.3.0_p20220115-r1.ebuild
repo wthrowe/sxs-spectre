@@ -6,11 +6,12 @@ EAPI=8
 inherit cmake
 
 HASH=66b3d9276ed95425ac919ac1841286d088b5f4b1
-S=${WORKDIR}/${PN}-${HASH}
 
 DESCRIPTION="A C++ 11 meta-programming library"
 HOMEPAGE="https://github.com/edouarda/brigand/wiki"
 SRC_URI="https://github.com/edouarda/brigand/archive/${HASH}.tar.gz -> ${P}.tar.gz"
+
+S=${WORKDIR}/${PN}-${HASH}
 
 LICENSE="Boost-1.0"
 SLOT="0"
