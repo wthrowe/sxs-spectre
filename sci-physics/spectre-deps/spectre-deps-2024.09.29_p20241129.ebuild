@@ -60,7 +60,7 @@ RDEPEND="
 		~dev-python/black-23.3.0[${PYTHON_USEDEP}]
 		dev-python/isort[${PYTHON_USEDEP}]
 		dev-cpp/google-benchmark
-		sys-devel/clang
+		llvm-core/clang
 	)
 	visualization? ( media-video/ffmpeg )
 "
