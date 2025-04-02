@@ -1,9 +1,9 @@
-# Copyright 2020-2024 William Throwe
+# Copyright 2020-2025 William Throwe
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..13} )
 
 inherit python-r1
 
