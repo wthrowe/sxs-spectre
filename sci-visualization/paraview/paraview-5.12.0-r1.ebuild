@@ -1,4 +1,5 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
+# Copyright 2025 William Throwe
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,15 +23,13 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="BSD MIT PSF-2 VTK"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="boost cg examples ffmpeg mpi nvcontrol openmp offscreen plugins python +qt5 +sqlite test tk +webengine"
+IUSE="boost cg examples ffmpeg mpi nvcontrol openmp plugins python +qt5 +sqlite test tk"
 
 RESTRICT="mirror test"
 
 REQUIRED_USE="
 	python? ( mpi ${PYTHON_REQUIRED_USE} )
-	webengine? ( qt5 )
-	qt5? ( sqlite )
-	?? ( offscreen qt5 )"
+	qt5? ( sqlite )"
 
 RDEPEND="
 	app-arch/lz4
@@ -57,8 +56,7 @@ RDEPEND="
 	x11-libs/libXt
 	ffmpeg? ( media-video/ffmpeg )
 	mpi? ( virtual/mpi[cxx,romio] )
-	offscreen? ( >=media-libs/mesa-18.3.6[osmesa] )
-	!offscreen? ( virtual/opengl )
+	virtual/opengl
 	python? (
 		${PYTHON_DEPS}
 		$(python_gen_cond_dep '
@@ -88,8 +86,7 @@ RDEPEND="
 		dev-qt/qtxmlpatterns:5
 	)
 	sqlite? ( dev-db/sqlite:3 )
-	tk? ( dev-lang/tk:0= )
-	webengine? ( dev-qt/qtwebengine:5[widgets] )"
+	tk? ( dev-lang/tk:0= )"
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	boost? (
@@ -174,8 +171,8 @@ src_configure() {
 		-DVTK_GROUP_ENABLE_MPI="$(usex mpi YES NO)"
 
 		# offscreen
-		-DVTK_OPENGL_HAS_OSMESA="$(usex offscreen)"
-		-DVTK_OPENGL_HAS_OSMESA="$(usex offscreen)"
+		-DVTK_OPENGL_HAS_OSMESA=no
+		-DVTK_OPENGL_HAS_OSMESA=no
 
 		# plugins
 		-DPARAVIEW_PLUGINS_DEFAULT="$(usex plugins)"
@@ -204,8 +201,8 @@ src_configure() {
 		-DVTK_GROUP_ENABLE_Tk="$(usex tk YES NO)"
 
 		# webengine
-		-DPARAVIEW_USE_QTWEBENGINE="$(usex webengine)"
-		-DVTK_GROUP_ENABLE_Web="$(usex webengine YES NO)"
+		-DPARAVIEW_USE_QTWEBENGINE=no
+		-DVTK_GROUP_ENABLE_Web=NO
 	)
 
 	if use openmp; then
