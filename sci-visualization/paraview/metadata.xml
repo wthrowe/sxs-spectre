@@ -2,8 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>tamiko@gentoo.org</email>
-		<name>Matthias Maier</name>
+		<email>wtt6@cornell.edu</email>
+		<name>William Throwe</name>
 	</maintainer>
 	<use>
 		<flag name="boost">Enable the usage of <pkg>dev-libs/boost</pkg></flag>
