@@ -1,0 +1,60 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2e625c11f..3444b9ed6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -969,9 +969,9 @@ add_dependencies(moduletcharmmain ck)
+ add_dependencies(moduletcharm ck)
+ add_dependencies(tcharm-compat ck)
+ 
+-if(${TARGET} STREQUAL "AMPI" OR (${TARGET} STREQUAL "LIBS" AND NOT BUILD_CHANGA))
+-  add_subdirectory(src/libs/ck-libs/ampi)
+-endif()
++# if(${TARGET} STREQUAL "AMPI" OR (${TARGET} STREQUAL "LIBS" AND NOT BUILD_CHANGA))
++#   add_subdirectory(src/libs/ck-libs/ampi)
++# endif()
+ 
+ # Charm4py
+ if(${TARGET} STREQUAL "charm4py")
+diff --git a/src/libs/ck-libs/CMakeLists.txt b/src/libs/ck-libs/CMakeLists.txt
+index d9ae5c584..1659887a3 100644
+--- a/src/libs/ck-libs/CMakeLists.txt
++++ b/src/libs/ck-libs/CMakeLists.txt
+@@ -125,22 +125,22 @@ configure_file(pose/libmodulepose.dep ${CMAKE_BINARY_DIR}/lib COPYONLY)
+ configure_file(pose/libmodulepose.dep ${CMAKE_BINARY_DIR}/lib/libmoduleseqpose.dep COPYONLY)
+ 
+ 
+-# idxl
+-if(NOT BUILD_CHANGA)
+-  set(idxl-h-sources idxl/idxlc.h idxl/idxl.h idxl/idxl_layout.h idxl/idxl_comm.h)
+-  if(CMK_CAN_LINK_FORTRAN)
+-    set(idxl-h-sources ${idxl-h-sources} idxl/idxlf.h)
+-  endif()
+-  set(idxl-cxx-sources idxl/idxl.C idxl/idxl_layout.C idxl/idxl_comm.C idxl/idxl_api.C)
+-  add_library(idxl ${idxl-h-sources} ${idxl-cxx-sources})
+-  add_dependencies(idxl ck moduleampi)
+-
+-  set_target_properties(idxl PROPERTIES RULE_LAUNCH_COMPILE ${CMAKE_BINARY_DIR}/bin/ampicxx)
+-
+-  foreach(file ${idxl-h-sources})
+-    configure_file(${file} ${CMAKE_BINARY_DIR}/include COPYONLY)
+-  endforeach()
+-endif()
++# # idxl
++# if(NOT BUILD_CHANGA)
++#   set(idxl-h-sources idxl/idxlc.h idxl/idxl.h idxl/idxl_layout.h idxl/idxl_comm.h)
++#   if(CMK_CAN_LINK_FORTRAN)
++#     set(idxl-h-sources ${idxl-h-sources} idxl/idxlf.h)
++#   endif()
++#   set(idxl-cxx-sources idxl/idxl.C idxl/idxl_layout.C idxl/idxl_comm.C idxl/idxl_api.C)
++#   add_library(idxl ${idxl-h-sources} ${idxl-cxx-sources})
++#   add_dependencies(idxl ck moduleampi)
++
++#   set_target_properties(idxl PROPERTIES RULE_LAUNCH_COMPILE ${CMAKE_BINARY_DIR}/bin/ampicxx)
++
++#   foreach(file ${idxl-h-sources})
++#     configure_file(${file} ${CMAKE_BINARY_DIR}/include COPYONLY)
++#   endforeach()
++# endif()
+ 
+ 
+ # searchengine

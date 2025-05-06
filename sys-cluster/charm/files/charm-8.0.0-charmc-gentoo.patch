@@ -1,0 +1,19 @@
+--- a/bin/charmc
++++ b/bin/charmc
+@@ -364,13 +364,9 @@ printVersion()
+ findCharmBin "$0"
+ 
+ CHARMDIR="$(getAbsPath "$CHARMBIN/..")"
+-CHARMLIB="$CHARMDIR/lib"
+-CHARMINC="$CHARMDIR/include"
+-CHARMLIBSO=
+-if [[ -d "$CHARMDIR/lib_so" ]]
+-then
+-  CHARMLIBSO="$CHARMDIR/lib_so"
+-fi
++CHARMLIB="gentoo-libdir"
++CHARMINC="/usr/include/gentoo-include"
++CHARMLIBSO="gentoo-libsodir"
+ 
+ ##############################################################################
+ #
