@@ -5,6 +5,6 @@
     <email>wtt6@cornell.edu</email>
   </maintainer>
   <upstream>
-    <remote-id type="github">hfp/libxsmm</remote-id>
+    <remote-id type="github">libxsmm/libxsmm</remote-id>
   </upstream>
 </pkgmetadata>

@@ -1,4 +1,4 @@
-# Copyright 2017-2022 William Throwe
+# Copyright 2017-2025 William Throwe
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,8 +6,8 @@ EAPI=8
 inherit toolchain-funcs
 
 DESCRIPTION="A library for small matrix-matrix multiplications and small convolutions"
-HOMEPAGE="https://github.com/hfp/libxsmm"
-SRC_URI="https://github.com/hfp/libxsmm/archive/${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://github.com/libxsmm/libxsmm"
+SRC_URI="https://github.com/libxsmm/libxsmm/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -51,6 +51,8 @@ src_compile() {
 		CXX=$(tc-getCXX)
 		FC= # Disable fortran
 		OPTFLAG=
+		ABSLIBS=0 # Fix rpath problems
+		SYM=1 # Debugging symbols
 		AVX=${AVX}
 		SSE=${SSE}
 		BLAS=$(usex blas 1 0)
